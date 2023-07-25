@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Main() {
+export default function Main(props) {
+  // useNavigate 훅을 사용하여 라우터 이동을 위한 navigate 함수를 받아옵니다.
   const navigate = useNavigate();
+
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      title: "첫 번째 할 일",
+      content: "이것을 해야합니다.",
+      author: "디니땅",
+    },
+    {
+      id: 2,
+      title: "두 번째 할 일",
+      content: "저것도 마무리해야합니다.",
+      author: "디니땅땅",
+    },
+    {
+      id: 3,
+      title: "세 번째 할 일",
+      content: "이것을 해야합니다.",
+      author: "디니땅땅땅",
+    },
+    {
+      id: 4,
+      title: "네 번째 할 일",
+      content: "저것을 마무리해야합니다.",
+      author: "디니땅땅땅땅",
+    },
+  ]);
+
+  // 게시물 삭제 함수
+  const handleDeletePost = (postId) => {
+    // setPosts를 사용하여 해당 postId에 해당하는 게시물을 삭제합니다.
+    // filter 함수를 사용하여 삭제하지 않을 게시물만 남기도록 합니다.
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   return (
     <>
+      {/* Header 컴포넌트를 통해 상단 헤더를 표시합니다. */}
       <Header />
+      {/* Container 컴포넌트를 통해 내용을 감싸고 중앙 정렬 및 최대 너비를 지정합니다. */}
       <Container>
         <div
           style={{
@@ -16,6 +54,7 @@ export default function Main() {
             padding: "12px",
           }}
         >
+          {/* 추가 버튼을 클릭하면 /create 페이지로 이동하도록 navigate 함수를 사용합니다. */}
           <button
             onClick={() => {
               navigate("/create");
@@ -32,9 +71,10 @@ export default function Main() {
             추가
           </button>
         </div>
-        {[1, 2, 3, 4].map((item) => (
+        {/* map을 사용하여 게시물 목록을 표시합니다. */}
+        {posts.map((post) => (
           <div
-            key={item}
+            key={post.id}
             style={{
               backgroundColor: "#EEEEEE",
               height: "100px",
@@ -46,7 +86,8 @@ export default function Main() {
           >
             <div
               onClick={() => {
-                navigate("/detail/1");
+                // 게시물 제목을 클릭하면 해당 게시물 상세 페이지로 이동하도록 navigate 함수를 사용합니다.
+                navigate(`/detail/${post.id}`);
               }}
               style={{
                 flex: 4,
@@ -54,7 +95,8 @@ export default function Main() {
                 cursor: "pointer",
               }}
             >
-              <h2>제목</h2>
+              {/* 게시물 제목을 표시합니다. */}
+              <h2>{post.title}</h2>
               <p
                 style={{
                   width: "300px",
@@ -63,10 +105,8 @@ export default function Main() {
                   whiteSpace: "nowrap",
                 }}
               >
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.Lorem
-                ipsum dolor, sit amet consectetur adipisicing elit.Lorem ipsum
-                dolor, sit amet consectetur adipisicing elit.Lorem ipsum dolor,
-                sit amet consectetur adipisicing elit.
+                {/* 게시물 내용을 표시합니다. */}
+                {post.content}
               </p>
             </div>
             <div
@@ -79,11 +119,12 @@ export default function Main() {
                 gap: "12px",
               }}
             >
-              <div>작성자</div>
+              <div>{post.author}</div>
               <div>
+                {/* 수정 버튼을 클릭하면 해당 게시물 수정 페이지로 이동하도록 navigate 함수를 사용합니다. */}
                 <button
                   onClick={() => {
-                    navigate("/edit");
+                    navigate(`/Detail/${post.id}`);
                   }}
                   style={{
                     border: "none",
@@ -97,9 +138,10 @@ export default function Main() {
                 >
                   수정
                 </button>
+                {/* 삭제 버튼을 클릭하면 해당 게시물을 삭제하는 handleDeletePost 함수를 호출합니다. */}
                 <button
                   onClick={() => {
-                    alert("삭제할까?");
+                    handleDeletePost(post.id);
                   }}
                   style={{
                     border: "none",

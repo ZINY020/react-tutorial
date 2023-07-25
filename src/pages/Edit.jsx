@@ -1,10 +1,37 @@
-import React, { Fragment } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Edit() {
+export default function Edit({ todos, setTodos }) {
+  const navigate = useNavigate();
+  const [editedTodo, setEditedTodo] = useState({});
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditedTodo((prevTodo) => ({
+      ...prevTodo,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (editedTodo.id && editedTodo.title && editedTodo.content) {
+      // Find the index of the todo to be updated
+      const index = todos.findIndex((todo) => todo.id === editedTodo.id);
+      if (index !== -1) {
+        // Create a copy of the todos array and update the specific todo
+        const updatedTodos = [...todos];
+        updatedTodos[index] = editedTodo;
+        setTodos(updatedTodos);
+        navigate("/"); // Navigate back to the main page after editing
+      }
+    }
+  };
+
   return (
-    <Fragment>
+    <>
       <Header />
       <Container>
         <form
@@ -14,14 +41,14 @@ export default function Edit() {
             flexDirection: "column",
             justifyContent: "space-evenly",
           }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("제출!");
-          }}
+          onSubmit={handleSubmit}
         >
           <div>
             <input
+              name="title"
               placeholder="제목"
+              value={editedTodo.title || ""}
+              onChange={handleInputChange}
               style={{
                 width: "100%",
                 height: "60px",
@@ -33,13 +60,12 @@ export default function Edit() {
               }}
             />
           </div>
-          <div
-            style={{
-              height: "400px",
-            }}
-          >
+          <div style={{ height: "400px" }}>
             <textarea
+              name="content"
               placeholder="내용"
+              value={editedTodo.content || ""}
+              onChange={handleInputChange}
               style={{
                 resize: "none",
                 height: "100%",
@@ -53,6 +79,7 @@ export default function Edit() {
             />
           </div>
           <button
+            type="submit"
             style={{
               width: "100%",
               height: "40px",
@@ -67,6 +94,6 @@ export default function Edit() {
           </button>
         </form>
       </Container>
-    </Fragment>
+    </>
   );
 }

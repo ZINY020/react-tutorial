@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Header from "../common/Header";
 import Container from "../common/Container";
 
 export default function Create() {
+  const [todos, setTodos] = useState("");
+  const addItem = () => {
+    setTodos([...todos]);
+  };
   return (
     <>
       <Header />
@@ -54,6 +58,7 @@ export default function Create() {
             />
           </div>
           <button
+            onClick={addItem}
             style={{
               width: "100%",
               height: "40px",
