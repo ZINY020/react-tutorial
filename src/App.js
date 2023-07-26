@@ -6,31 +6,35 @@ import Create from "./pages/Create";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Edit from "./pages/Edit";
+import uuid from "react-uuid";
 
 function App() {
+  const [title, setTitle] = useState("");
+  const [content, setContentse] = useState("");
   // useState 훅을 사용하여 게시물 목록을 저장할 상태(posts)와 해당 상태를 업데이트하는 함수(setPosts)를 만듭니다.
   // 임시로 4개의 게시물 데이터를 배열로 만들어 초기값으로 설정합니다.
+  // uuid는 중복 문제를 효과적으로 방지하기
   const [posts, setPosts] = useState([
     {
-      id: 1,
+      id: uuid(),
       title: "첫 번째 할 일",
       content: "이것을 해야합니다.",
       author: "디니땅",
     },
     {
-      id: 2,
+      id: uuid(),
       title: "두 번째 할 일",
       content: "저것도 마무리해야합니다.",
       author: "디니땅땅",
     },
     {
-      id: 3,
+      id: uuid(),
       title: "세 번째 할 일",
       content: "이것을 해야합니다.",
       author: "디니땅땅땅",
     },
     {
-      id: 4,
+      id: uuid(),
       title: "네 번째 할 일",
       content: "저것을 마무리해야합니다.",
       author: "디니땅땅땅땅",

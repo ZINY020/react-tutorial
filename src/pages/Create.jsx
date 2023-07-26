@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useState } from "react";
 
-export default function Create() {
-  const [todos, setTodos] = useState("");
-  const addItem = () => {
-    setTodos([...todos]);
-  };
+export default function Create({ posts, setPosts }) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   return (
     <>
       <Header />
@@ -26,6 +25,10 @@ export default function Create() {
         >
           <div>
             <input
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              value={title}
               placeholder="제목"
               style={{
                 width: "100%",
@@ -58,7 +61,6 @@ export default function Create() {
             />
           </div>
           <button
-            onClick={addItem}
             style={{
               width: "100%",
               height: "40px",

@@ -15,7 +15,9 @@ export default function Detail() {
             borderRadius: "12px",
             padding: "12px",
           }}
-        ></h1>
+        >
+          제목
+        </h1>
         <div
           style={{
             height: "400px",

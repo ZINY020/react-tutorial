@@ -3,36 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Main(props) {
+export default function Main({ posts, setPosts }) {
   // useNavigate 훅을 사용하여 라우터 이동을 위한 navigate 함수를 받아옵니다.
   const navigate = useNavigate();
 
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "첫 번째 할 일",
-      content: "이것을 해야합니다.",
-      author: "디니땅",
-    },
-    {
-      id: 2,
-      title: "두 번째 할 일",
-      content: "저것도 마무리해야합니다.",
-      author: "디니땅땅",
-    },
-    {
-      id: 3,
-      title: "세 번째 할 일",
-      content: "이것을 해야합니다.",
-      author: "디니땅땅땅",
-    },
-    {
-      id: 4,
-      title: "네 번째 할 일",
-      content: "저것을 마무리해야합니다.",
-      author: "디니땅땅땅땅",
-    },
-  ]);
+  // useState 훅을 사용하여 게시물 목록을 저장할 상태(posts)와 해당 상태를 업데이트하는 함수(setPosts)를 만듭니다.
+  // 임시로 4개의 게시물 데이터를 배열로 만들어 초기값으로 설정합니다.
 
   // 게시물 삭제 함수
   const handleDeletePost = (postId) => {
@@ -124,7 +100,7 @@ export default function Main(props) {
                 {/* 수정 버튼을 클릭하면 해당 게시물 수정 페이지로 이동하도록 navigate 함수를 사용합니다. */}
                 <button
                   onClick={() => {
-                    navigate(`/Detail/${post.id}`);
+                    navigate(`/Detail/${post.id}`); // 여기서 수정 페이지로 이동할 때 id를 함께 보냅니다.
                   }}
                   style={{
                     border: "none",

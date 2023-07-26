@@ -20,7 +20,6 @@ export default function Header() {
           cursor: "pointer",
         }}
       >
-        {/* 아이콘을 링크로 감싸서 메인페이지로 이동 */}
         <Link to="/">
           <FaHome />
         </Link>
