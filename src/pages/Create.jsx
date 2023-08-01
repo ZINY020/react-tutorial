@@ -1,12 +1,20 @@
 import React from "react";
-
+import uuid from "react-uuid";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "../redux/modules/postSlice";
 
-export default function Create({ posts, setPosts }) {
+export default function Create({}) {
+  // useSelector로 redux 연결
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
   return (
     <>
       <Header />
@@ -20,7 +28,15 @@ export default function Create({ posts, setPosts }) {
           }}
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("제출!");
+
+            const post = {
+              id: uuid(),
+              title: title,
+              content,
+              author: "없떠",
+            };
+            dispatch(add(post));
+            navigate("/");
           }}
         >
           <div>
@@ -48,6 +64,9 @@ export default function Create({ posts, setPosts }) {
           >
             <textarea
               placeholder="내용"
+              onChange={(e) => {
+                setContent(e.target.value);
+              }}
               style={{
                 resize: "none",
                 height: "100%",
@@ -61,6 +80,7 @@ export default function Create({ posts, setPosts }) {
             />
           </div>
           <button
+            type="submit"
             style={{
               width: "100%",
               height: "40px",

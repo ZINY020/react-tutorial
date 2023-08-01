@@ -81,19 +81,21 @@ export default function Login() {
                 width: "360px",
               }}
             >
-              <button
-                style={{
-                  width: "100%",
-                  border: "none",
-                  padding: "12px",
-                  borderRadius: "6px",
-                  backgroundColor: "#FF6969",
-                  color: "white",
-                  cursor: "pointer",
-                }}
-              >
-                회원가입하러 가기
-              </button>
+              <Link to="/signup">
+                <button
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    padding: "12px",
+                    borderRadius: "6px",
+                    backgroundColor: "#FF6969",
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  회원가입하러 가기
+                </button>
+              </Link>
             </div>
           </form>
         </div>

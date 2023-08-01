@@ -1,3 +1,12 @@
+# redux-toolkit
+
+1. **redux toolkit**에 필요한 **패키지 설치**하기
+2. **redux toolkit** 사용을 위한 **기본 세팅**하기
+3. useState의 **초기값**을 redux toolkit의 **initialState**에 넣기
+4. **useSelector**를 이용하여 **데이터 보여주기**
+5. 추가, 수정, 삭제 **Reducers** 만들기
+6. **useDispatch** 활용하여 **추가, 수정, 삭제 적용**하기
+
 ## 1. 모든 페이지가 CSR(Client Side Rendering)로 이동되도록 설정합니다.
 
 - 홈 로고 클릭 시 메인페이지(`/`)로 이동

@@ -1,10 +1,19 @@
 import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { remove } from "../redux/modules/postSlice";
 
-export default function Detail() {
+export default function Detail({}) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const reduxPost = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
+  // find를 이용해 props로 내려받은 posts의 값에 접근합니다. post의 id값과 useparams를 이용해 찾은 id값이 동일한 요소를 찾습니다.
+  const findPost = reduxPost.find((post) => post.id === id);
+
   return (
     <>
       <Header />
@@ -16,7 +25,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          제목
+          {findPost?.title}
         </h1>
         <div
           style={{
@@ -26,10 +35,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad doloribus
-          blanditiis vitae sapiente. Expedita delectus nihil animi pariatur,
-          labore quod officiis dolor fugit. Mollitia quod, delectus velit
-          deleniti nihil veniam!
+          {findPost?.content}
         </div>
         <div
           style={{
@@ -40,7 +46,7 @@ export default function Detail() {
         >
           <button
             onClick={() => {
-              navigate("/edit");
+              navigate(`/edit/${id}`);
             }}
             style={{
               border: "none",
@@ -56,7 +62,9 @@ export default function Detail() {
           </button>
           <button
             onClick={() => {
-              alert("삭제할까?");
+              dispatch(remove(findPost.id));
+
+              navigate("/");
             }}
             style={{
               border: "none",
