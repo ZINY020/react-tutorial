@@ -6,14 +6,21 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../redux/modules/postSlice";
+import { auth } from "../firebase";
 
 export default function Create({}) {
   // useSelector로 redux 연결
 
+  const currentUserEmail = auth?.currentUser.email;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  // useSelector 사용
+  const reduxUser = useSelector((state) => state.user);
+
+  console.log(reduxUser);
 
   return (
     <>
@@ -33,7 +40,7 @@ export default function Create({}) {
               id: uuid(),
               title: title,
               content,
-              author: "없떠",
+              author: currentUserEmail,
             };
             dispatch(add(post));
             navigate("/");

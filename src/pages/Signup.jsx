@@ -2,9 +2,19 @@ import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { db } from "../firebase";
-import { query, collection, where, getDoc, addDoc } from "firebase/firestore";
+import {
+  query,
+  collection,
+  where,
+  getDoc,
+  addDoc,
+  getFirestore,
+} from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from "../firebase";
+import { getUserInfo } from "../redux/modules/userSlice";
 
 export default function Signup() {
   const [email, setemail] = useState("");
@@ -13,6 +23,7 @@ export default function Signup() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //fiestore 데이터 조회
   const fetchUserData = async () => {
@@ -21,9 +32,13 @@ export default function Signup() {
       const querySnapshot = await getDoc(
         query(usersRef, where("email", "==", email))
       );
+      const usersData = []; // 임시로 파이어베이스에서 필드들을 하나씩 저장하는 배열
       querySnapshot.forEach((doc) => {
         console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        usersData.push(doc.data());
       });
+
+      dispatch(getUserInfo(...usersData));
     } catch (error) {
       console.error("데이터 조회 실패:", error);
     }
@@ -95,6 +110,9 @@ export default function Signup() {
       const user = userCredential.user;
       console.log("회원가입 성공:", user.email);
 
+      // Firebase Firestore를 사용하여 회원 정보 저장
+      const db = getFirestore(app);
+
       const usersCollectionRef = collection(db, "users");
       await addDoc(usersCollectionRef, {
         uid: user.uid,
@@ -109,133 +127,134 @@ export default function Signup() {
       console.error("회원가입 실패:", error.message);
       window.alert("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
+  };
 
-    return (
-      <>
-        <Header />
-        <Container>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              height: "600px",
-              alignItems: "center",
-            }}
-          >
-            <form>
-              <div
+  return (
+    <>
+      <Header />
+      <Container>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            height: "600px",
+            alignItems: "center",
+          }}
+        >
+          <form>
+            <div
+              style={{
+                width: "360px",
+                marginBottom: "12px",
+              }}
+            >
+              <input
+                placeholder="이메일"
+                type="text"
+                value={email}
+                onChange={handleEmailChange}
                 style={{
-                  width: "360px",
-                  marginBottom: "12px",
+                  width: "100%",
+                  height: "40px",
+                  fontSize: "16px",
+                  borderRadius: "8px",
+                  border: "1px solid lightgrey",
+                  padding: "8px",
+                  boxSizing: "border-box",
                 }}
-              >
-                <input
-                  placeholder="이메일"
-                  type="text"
-                  value={email}
-                  onChange={handleEmailChange}
-                  style={{
-                    width: "100%",
-                    height: "40px",
-                    fontSize: "16px",
-                    borderRadius: "8px",
-                    border: "1px solid lightgrey",
-                    padding: "8px",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-              <div
+              />
+            </div>
+            <div
+              style={{
+                width: "360px",
+                marginBottom: "12px",
+              }}
+            >
+              <input
+                placeholder="비밀번호"
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
                 style={{
-                  width: "360px",
-                  marginBottom: "12px",
+                  width: "100%",
+                  height: "40px",
+                  fontSize: "16px",
+                  borderRadius: "8px",
+                  border: "1px solid lightgrey",
+                  padding: "8px",
+                  boxSizing: "border-box",
                 }}
-              >
-                <input
-                  placeholder="비밀번호"
-                  type="password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  style={{
-                    width: "100%",
-                    height: "40px",
-                    fontSize: "16px",
-                    borderRadius: "8px",
-                    border: "1px solid lightgrey",
-                    padding: "8px",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-              <div
+              />
+            </div>
+            <div
+              style={{
+                width: "360px",
+                marginBottom: "12px",
+              }}
+            >
+              <input
+                placeholder="비밀번호 확인"
+                type="password"
+                value={confirmpassword}
+                onChange={handleConfirmPasswordChange}
                 style={{
-                  width: "360px",
-                  marginBottom: "12px",
+                  width: "100%",
+                  height: "40px",
+                  fontSize: "16px",
+                  borderRadius: "8px",
+                  border: "1px solid lightgrey",
+                  padding: "8px",
+                  boxSizing: "border-box",
                 }}
-              >
-                <input
-                  placeholder="비밀번호 확인"
-                  type="password"
-                  value={confirmpassword}
-                  onChange={handleConfirmPasswordChange}
-                  style={{
-                    width: "100%",
-                    height: "40px",
-                    fontSize: "16px",
-                    borderRadius: "8px",
-                    border: "1px solid lightgrey",
-                    padding: "8px",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-              <div
+              />
+            </div>
+            <div
+              style={{
+                width: "360px",
+                marginBottom: "12px",
+              }}
+            >
+              {error && <div style={{ color: "red" }}>{error}</div>}
+              <button
                 style={{
-                  width: "360px",
-                  marginBottom: "12px",
+                  width: "100%",
+                  border: "none",
+                  padding: "12px",
+                  borderRadius: "6px",
+                  backgroundColor: "#FF6969",
+                  color: "white",
+                  cursor: "pointer",
                 }}
+                type="button"
+                onClick={handleSignup}
               >
+                회원가입하기
+              </button>
+            </div>
+            <div
+              style={{
+                width: "360px",
+              }}
+            >
+              <Link to="/Login">
                 <button
                   style={{
                     width: "100%",
                     border: "none",
                     padding: "12px",
                     borderRadius: "6px",
-                    backgroundColor: "#FF6969",
+                    backgroundColor: "#78C1F3",
                     color: "white",
                     cursor: "pointer",
                   }}
-                  type="button"
-                  onChange={handleSignup}
                 >
-                  회원가입하기
+                  로그인하러 가기
                 </button>
-              </div>
-              <div
-                style={{
-                  width: "360px",
-                }}
-              >
-                <Link to="/Login">
-                  <button
-                    style={{
-                      width: "100%",
-                      border: "none",
-                      padding: "12px",
-                      borderRadius: "6px",
-                      backgroundColor: "#78C1F3",
-                      color: "white",
-                      cursor: "pointer",
-                    }}
-                  >
-                    로그인하러 가기
-                  </button>
-                </Link>
-              </div>
-            </form>
-          </div>
-        </Container>
-      </>
-    );
-  };
+              </Link>
+            </div>
+          </form>
+        </div>
+      </Container>
+    </>
+  );
 }

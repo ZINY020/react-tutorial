@@ -32,7 +32,7 @@ const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    // post Add를 만든다
+    // post Add를 만든다 객체 형태
     add(state, action) {
       return [...state, action.payload];
     },
